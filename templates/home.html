@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+{% block container %}
+<div class="uk-alert-warning" uk-alert>
+  Cette page montre comment embedder dans une page html des graphiques générés en python dans le backend (avec Plotly).
+  Les données et les graphiques sont obtenus grâce au <a href="" target="_blanck">package pybso</a> qui automatise la constitution d'un baromètre science ouverte local.
+</div>
+<section class="uk-section uk-section-large uk-section-muted">
+    {%for (plot,f) in zip(plots,functions)%} 
+    <div class="uk-text-center" uk-grid>
+      <div class="uk-width-auto@m">
+        <div class="uk-card uk-card-default uk-card-body">
+          <a href="/api/data?view={{f}}" target="_blanck">Données consolidées (API)</a>
+        </div>
+      </div>
+      <div class="uk-width-expand@m">
+        <div class="uk-card uk-card-default uk-card-body">
+          <div class="chart" id="bargraph{{loop.index0}}">
+          </div>
+          <div id="displaydata{{loop.index0}}"></div>
+      </div>
+      </div>
+  </div>
+    <script type="text/javascript">
+        var img_png = d3.select('#displaydata{{loop.index0}}');
+        var graphs = {{plot|safe}};
+        Plotly.plot('bargraph{{loop.index0}}',graphs.data,graphs.layout || {});
+        </script>
+{%endfor%}
+</section>
+{% endblock %}
